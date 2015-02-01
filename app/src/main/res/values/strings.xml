@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VitonHealth Mobile</string>
+    <string name="title_activity_main">Viton Mobile</string>
+    <string name="push_data_response"></string>
+    <string name="viton_web">Viton Web</string>
+    <string name="viton_service">Viton Service</string>
+    <string name="viton_setting">Viton Setting</string>
+
+</resources>

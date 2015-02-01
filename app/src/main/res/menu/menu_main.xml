@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.vitonhealth.android.login.MainActivity">
+
+    <item
+        android:id="@+id/viton_setting"
+        android:title="@string/viton_setting"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/viton_web"
+        android:title="@string/viton_web" />
+    <item
+        android:id="@+id/viton_service"
+        android:title="@string/viton_service" />
+</menu>

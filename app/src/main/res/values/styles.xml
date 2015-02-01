@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="MyTheme" parent="Theme.AppCompat.Light">
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">true</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <color name="colorPrimary">#f7f7f7</color>
+    <color name="white">#fff</color>
+    <color name="headerTextColor">#007aff</color>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="titleTextStyle">@style/MyTitleTextStyle</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="MyTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/headerTextColor</item>
+    </style>
+
+</resources>
