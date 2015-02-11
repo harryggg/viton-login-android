@@ -14,4 +14,10 @@
     <item
         android:id="@+id/viton_service"
         android:title="@string/viton_service" />
+    <item
+        android:id="@+id/start_watch_service"
+        android:title="start_watch_service" />
+    <item
+        android:id="@+id/stop_watch_service"
+        android:title="stop_watch_service" />
 </menu>

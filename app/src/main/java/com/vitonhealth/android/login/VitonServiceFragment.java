@@ -1,7 +1,9 @@
 package com.vitonhealth.android.login;
 
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +31,7 @@ import java.util.TimeZone;
  * @author luochun
  */
 public class VitonServiceFragment extends Fragment {
-
+    private static final String TAG = "viton service";
     public VitonServiceFragment() {
     }
 
@@ -83,21 +89,60 @@ public class VitonServiceFragment extends Fragment {
 
             // generate some random data for testing
             JSONArray data = new JSONArray();
-            Date now = new Date();
-            Random r = new Random(now.getTime());
-            for (int i = 0; i < 60 * 60 * 2; i++) {
+           Date now = new Date();
+            String ads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/viton/";
+            File folder = new File(ads);
+            String[] dirs = folder.list();
+            int lineCounter = 0;
+            for (String dir:dirs){
+                File subFolder = new File(ads + dir+"/");
+                String[] files = subFolder.list();
                 JSONObject one = new JSONObject();
-                try {
-                    Date newD = new Date(now.getTime() - i * 1000);
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
-                    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-                    one.put("value", 60 + r.nextDouble() * 40);
-                    one.put("timestamp", dateFormat.format(newD));
-                } catch (JSONException e) {
-                    Log.v("main_activity", "failed to add random data", e);
+                boolean allSuccess = true;
+                for (String file:files) {
+                    BufferedReader br = null;
+
+                    try {
+
+                        String sCurrentLine;
+
+                        br = new BufferedReader(new FileReader(ads+dir+"/"+file));
+
+                        while ((sCurrentLine = br.readLine()) != null) {
+                            String[] datas = sCurrentLine.split(" ");
+                            try {
+                                one.put("value", Double.parseDouble(datas[1]));
+                                one.put("timestamp", datas[0]);
+                                data.put(one);
+                                lineCounter++;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                allSuccess = false;
+                            }
+
+                        }
+                        File temp = new File(ads + dir+"/"+file);
+                        temp.delete();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            if (br != null)br.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+
+                        }
+
+
+                    }
+
                 }
-                data.put(one);
+                if(allSuccess) {
+                    File tempDir = new File(ads + dir + "/");
+                    tempDir.delete();
+                }
             }
+
 
             // post data to server, should use async call
             VitonClient client = new VitonClient();
@@ -107,7 +152,9 @@ public class VitonServiceFragment extends Fragment {
             }
             String reply = client.pushHbrData(token.getAccessToken(), data);
             Log.v("main_activity", reply);
-            return reply;
+            return reply + "uploaded "+lineCounter+ " lines";
+
+
         }
 
         @Override

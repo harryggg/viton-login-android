@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vitonhealth.android.login" >
+    package="com.example.fengling.wear" >
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- Declare the permission for body sensor -->
     <uses-permission android:name="android.permission.BODY_SENSORS" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyTheme">
-        <meta-data android:name="com.google.android.gms.version"
+        android:theme="@android:style/Theme.DeviceDefault" >
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:name="com.example.fengling.wear.MyActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-        </activity>
+
+
+
+
+        <service
+            android:name="com.example.fengling.wear.MyService"
+            android:enabled="true" >
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
+        </service>
+
         <receiver
-            android:name=".AlarmService"
+            android:name="com.example.fengling.wear.AlarmService"
             android:enabled="true"
             android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <service
-            android:name=".DataTransferService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
-        <service
-            android:name=".phoneWearableListenerService"
+            android:name="com.example.fengling.wear.watchWearableListenerService"
             android:enabled="true"
             android:exported="true" >
             <meta-data
@@ -57,6 +59,11 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
             </intent-filter>
+        </service>
+        <service
+            android:name="com.example.fengling.wear.PowerSavingService"
+            android:enabled="true"
+            android:exported="true" >
         </service>
     </application>
 

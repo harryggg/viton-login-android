@@ -1,5 +1,6 @@
 package com.vitonhealth.android.login;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -42,6 +43,17 @@ public class MainActivity extends ActionBarActivity {
             return true;
         } else if (id == R.id.viton_service) {
             showVitonService();
+            return true;
+        } else if (id == R.id.start_watch_service) {
+
+            Intent myIntent1 = new Intent(this.getApplicationContext(), DataTransferService.class);
+            this.getApplicationContext().startService(myIntent1);
+            return true;
+        } else if (id == R.id.stop_watch_service) {
+
+            Intent myIntent1 = new Intent(this.getApplicationContext(), DataTransferService.class);
+            myIntent1.setAction("TERMINATION");
+            this.getApplicationContext().startService(myIntent1);
             return true;
         }
 
