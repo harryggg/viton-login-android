@@ -20,4 +20,7 @@
     <item
         android:id="@+id/stop_watch_service"
         android:title="stop_watch_service" />
+    <item
+        android:id="@+id/ble"
+        android:title="ble_testing" />
 </menu>

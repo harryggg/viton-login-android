@@ -21,12 +21,12 @@ public class AlarmService extends BroadcastReceiver {
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTimeInMillis(System.currentTimeMillis());
-            calendar1.set(Calendar.HOUR_OF_DAY, 9);
+            calendar1.set(Calendar.HOUR_OF_DAY, Flags.START_HOUR);
 
 
             Calendar calendar2 = Calendar.getInstance();
             calendar2.setTimeInMillis(System.currentTimeMillis());
-            calendar2.set(Calendar.HOUR_OF_DAY, 17);
+            calendar2.set(Calendar.HOUR_OF_DAY, Flags.END_HOUR);
 
             PendingIntent alarmIntent1 = PendingIntent.getService(context, 0, myIntent1, 0);
             PendingIntent alarmIntent2 = PendingIntent.getService(context, 0, myIntent2, 0);
@@ -45,7 +45,7 @@ public class AlarmService extends BroadcastReceiver {
 
             //if booted between 9 to 5, start service immediately
             int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-            if (hour > 8 && hour < 17) {
+            if (hour >= Flags.START_HOUR && hour < Flags.END_HOUR) {
                 Toast.makeText(context, "between 9 to 17!", Toast.LENGTH_LONG).show();
                 context.startService(myIntent1);
 

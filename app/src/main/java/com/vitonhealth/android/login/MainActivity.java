@@ -55,6 +55,9 @@ public class MainActivity extends ActionBarActivity {
             myIntent1.setAction("TERMINATION");
             this.getApplicationContext().startService(myIntent1);
             return true;
+        }else if (id == R.id.ble){
+            Intent myIntent1 = new Intent(this.getApplicationContext(), BLEScanActivity.class);
+            this.getApplicationContext().startActivity(myIntent1);
         }
 
         return super.onOptionsItemSelected(item);
