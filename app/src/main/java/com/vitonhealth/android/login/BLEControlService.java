@@ -1,6 +1,7 @@
 package com.vitonhealth.android.login;
 
 
+
 import android.app.Service;
         import android.bluetooth.BluetoothGattCharacteristic;
         import android.bluetooth.BluetoothGattService;
@@ -10,11 +11,11 @@ import android.app.Service;
         import android.content.Intent;
         import android.content.IntentFilter;
         import android.content.ServiceConnection;
-        import android.os.Bundle;
+
         import android.os.IBinder;
-        import android.util.Log;
-        import android.view.Menu;
-        import android.view.MenuItem;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
         import android.widget.TextView;
         import android.widget.Toast;
 
@@ -107,6 +108,7 @@ public class BLEControlService extends Service {
         if(intent.getAction()=="TERMINATION"){
             Log.i(TAG,"terminated");
             //           unregisterReceiver(mGattUpdateReceiver);
+            stopForeground(true);
             stopSelf();
         }else {
             Log.i(TAG, "started");
@@ -115,6 +117,17 @@ public class BLEControlService extends Service {
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
             Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+            NotificationCompat.Builder b=new NotificationCompat.Builder(this);
+
+            b.setOngoing(true);
+
+            b.setContentTitle(getString(R.string.notification_title))
+                    .setContentText("ble")
+                    .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                    .setTicker(getString(R.string.ticker_text));
+
+
+            startForeground(1, b.build());
 
         }
         return super.onStartCommand(intent, flags, startId);

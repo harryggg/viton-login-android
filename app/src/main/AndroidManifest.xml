@@ -33,6 +33,11 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
+        <activity
+            android:name=".BLEScanActivity"
+            android:label="BLE testing" >
+
+        </activity>
         <receiver
             android:name=".AlarmService"
             android:enabled="true"

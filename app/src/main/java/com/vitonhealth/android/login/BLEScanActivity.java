@@ -20,6 +20,8 @@ package com.vitonhealth.android.login;
 
         import android.app.Activity;
         import android.app.ListActivity;
+        import android.app.Notification;
+        import android.app.PendingIntent;
         import android.bluetooth.BluetoothAdapter;
         import android.bluetooth.BluetoothDevice;
         import android.bluetooth.BluetoothManager;
@@ -60,7 +62,7 @@ public class BLEScanActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setTitle(R.string.title_devices);
+
 
 
         mHandler = new Handler();
@@ -159,6 +161,7 @@ public class BLEScanActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
+
         final Intent intent =  new Intent(this, BLEControlService.class);
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_ADDRESS, device.getAddress());
