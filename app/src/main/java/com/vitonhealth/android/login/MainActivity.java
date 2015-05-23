@@ -59,6 +59,10 @@ public class MainActivity extends ActionBarActivity {
             Intent myIntent1 = new Intent(this.getApplicationContext(), BLEScanActivity.class);
             startActivity(myIntent1);
             return true;
+        }else if (id == R.id.ble_stop){
+            Intent intent = new Intent(this,BLEControlService.class);
+            intent.setAction("TERMINATION");
+            startService(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -108,7 +108,7 @@ public class BLEControlService extends Service {
         if(intent.getAction()=="TERMINATION"){
             Log.i(TAG,"terminated");
             //           unregisterReceiver(mGattUpdateReceiver);
-            stopForeground(true);
+            //stopForeground(true);
             stopSelf();
         }else {
             Log.i(TAG, "started");
@@ -117,7 +117,7 @@ public class BLEControlService extends Service {
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
             Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-            NotificationCompat.Builder b=new NotificationCompat.Builder(this);
+            /*NotificationCompat.Builder b=new NotificationCompat.Builder(this);
 
             b.setOngoing(true);
 
@@ -127,7 +127,8 @@ public class BLEControlService extends Service {
                     .setTicker(getString(R.string.ticker_text));
 
 
-            startForeground(1, b.build());
+            startForeground(1, b.build());*/
+
 
         }
         return super.onStartCommand(intent, flags, startId);

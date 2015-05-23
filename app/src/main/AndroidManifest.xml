@@ -38,6 +38,16 @@
             android:label="BLE testing" >
 
         </activity>
+        <service
+            android:name=".BLEControlService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name=".BluetoothLeService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
         <receiver
             android:name=".AlarmService"
             android:enabled="true"

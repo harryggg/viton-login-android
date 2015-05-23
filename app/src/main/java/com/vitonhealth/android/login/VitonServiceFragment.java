@@ -87,10 +87,28 @@ public class VitonServiceFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
 
+
+
+            String ads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/vitonBLE/";
+            JSONArray data = generateJSON(ads);
+            // post data to server, should use async call
+            VitonClient client = new VitonClient();
+            if (token.shouldRefresh()) {
+                token = client.renewToken(token);
+                token.save(textView.getRootView().getContext().getSharedPreferences(VitonClient.PREFS_NAME, 0));
+            }
+            String reply = client.pushHbrData(token.getAccessToken(), data);
+            Log.v("main_activity", reply);
+            return reply;
+
+
+        }
+
+        protected JSONArray generateJSON(String ads){
             // generate some random data for testing
             JSONArray data = new JSONArray();
-           Date now = new Date();
-            String ads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/viton/";
+
+
             File folder = new File(ads);
             String[] dirs = folder.list();
             int lineCounter = 0;
@@ -142,21 +160,8 @@ public class VitonServiceFragment extends Fragment {
                     tempDir.delete();
                 }
             }
-
-
-            // post data to server, should use async call
-            VitonClient client = new VitonClient();
-            if (token.shouldRefresh()) {
-                token = client.renewToken(token);
-                token.save(textView.getRootView().getContext().getSharedPreferences(VitonClient.PREFS_NAME, 0));
-            }
-            String reply = client.pushHbrData(token.getAccessToken(), data);
-            Log.v("main_activity", reply);
-            return reply + "uploaded "+lineCounter+ " lines";
-
-
+            return data;
         }
-
         @Override
         protected void onPostExecute(final String reply) {
             textView.setText("server reply: " + reply);

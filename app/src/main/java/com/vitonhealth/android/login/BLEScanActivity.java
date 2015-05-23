@@ -162,7 +162,7 @@ public class BLEScanActivity extends ListActivity {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
 
-        final Intent intent =  new Intent(this, BLEControlService.class);
+        Intent intent =  new Intent(this, BLEControlService.class);
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         SharedPreferences settings = getSharedPreferences("setting",0);
@@ -171,7 +171,7 @@ public class BLEScanActivity extends ListActivity {
         editor.commit();
         Log.i(TAG,settings.getString("LeDeviceAddress","null"));
         if (mScanning) {
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothAdapter.startLeScan(mLeScanCallback);
             mScanning = false;
         }
         startService(intent);
@@ -290,7 +290,7 @@ public class BLEScanActivity extends ListActivity {
                             if (!lastDeviceAddress.equals("null")){
                                 Log.i(TAG,"previous address found:"+lastDeviceAddress);
                                 Log.i(TAG,device.getAddress());
-                                if (device.getAddress().equals(lastDeviceAddress)) {
+                               /* if (device.getAddress().equals(lastDeviceAddress)) {
                                     Log.i(TAG,"previous device found");
                                     CharSequence text = "auto-connected!";
                                     int duration = Toast.LENGTH_SHORT;
@@ -299,12 +299,14 @@ public class BLEScanActivity extends ListActivity {
                                     Intent intent = new Intent(BLEScanActivity.this,BLEControlService.class);
                                     intent.putExtra(BLEControlService.EXTRAS_DEVICE_NAME, device.getName());
                                     intent.putExtra(BLEControlService.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+                                    startService(intent);
                                     if (mScanning) {
-                                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                                        Log.i(TAG,"scanning");
+                                        mBluetoothAdapter.startLeScan(mLeScanCallback);
                                         mScanning = false;
                                     }
-                                    startService(intent);
-                                }
+
+                                }*/
                             }
                             mLeDeviceListAdapter.addDevice(device);
                             mLeDeviceListAdapter.notifyDataSetChanged();

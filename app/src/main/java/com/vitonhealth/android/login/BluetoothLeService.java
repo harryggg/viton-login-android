@@ -437,6 +437,10 @@ public class BluetoothLeService extends Service {
         //String sourcePath = getFilesDir().getAbsolutePath();
         //String destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
         //copyFile(String.valueOf(sourcePath),"/test.txt",String.valueOf(destinationPath));
+        OAuth2Token token = OAuth2Token.load(getApplicationContext().getSharedPreferences(VitonClient.PREFS_NAME, 0));
+
+        PushDataTask mAuthTask = new PushDataTask(token,getApplicationContext());
+        mAuthTask.execute((Void) null);
     }
     static class BasicAuthenticator extends Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {

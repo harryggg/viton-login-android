@@ -23,4 +23,7 @@
     <item
         android:id="@+id/ble"
         android:title="ble_testing" />
+    <item
+        android:id="@+id/ble_stop"
+        android:title="ble_stop" />
 </menu>
