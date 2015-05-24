@@ -39,6 +39,13 @@
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"
                 android:maxLines="1" android:singleLine="true" />
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remember Me"
+                android:id="@+id/remember_password"
+                android:layout_weight="0.61" />
+
             <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" android:text="@string/action_sign_in"
@@ -46,19 +53,20 @@
                 android:background="#007aff"
                 android:textColor="#fff"/>
 
-            <TextView
-                android:id="@+id/signup_link"
-                android:text="@string/signup_link"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="20px"
-                android:gravity="center"
-                android:layout_weight="3.30"
-                android:layout_marginTop="50px" />`
+            `
 
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/signup_link"
+        android:text="@string/signup_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20px"
+        android:gravity="center"
+        android:layout_weight="3.30"
+        android:layout_marginTop="50px" />
 
 </LinearLayout>
 

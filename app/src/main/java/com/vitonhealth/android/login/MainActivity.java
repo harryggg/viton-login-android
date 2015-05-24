@@ -63,6 +63,15 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(this,BLEControlService.class);
             intent.setAction("TERMINATION");
             startService(intent);
+        }else if (id == R.id.logout){
+            SharedPreferences settings = getSharedPreferences("setting",0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("loginRemember",false);
+            editor.putString("loginEmail","null");
+            editor.putString("loginPassword","null");
+            editor.commit();
+            startActivity(new Intent(this.getApplicationContext(), LoginActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

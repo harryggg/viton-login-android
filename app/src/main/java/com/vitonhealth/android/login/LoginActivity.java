@@ -25,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -45,19 +46,27 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
+    private CheckBox mRememberView;
     private View mProgressView;
     private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences settings = getSharedPreferences("setting",0);
+        if (settings.getBoolean("loginRemember",false)==true){
 
+            String email = settings.getString("loginEmail","null");
+            String password = settings.getString("loginPassword","null");
+            mAuthTask = new UserLoginTask(email,password,true);
+            mAuthTask.execute((Void) null);
+        }
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
         populateAutoComplete();
-
+        mRememberView =  (CheckBox) findViewById(R.id.remember_password);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -101,13 +110,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             return;
         }
 
+        String email = mUsernameView.getText().toString();
+        String password = mPasswordView.getText().toString();
+        Boolean remembered = mRememberView.isChecked();
         // Reset errors.
         mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+
 
         boolean cancel = false;
         View focusView = null;
@@ -138,8 +149,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password,remembered);
             mAuthTask.execute((Void) null);
         }
     }
@@ -252,10 +264,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
+        private final Boolean mRemembered;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String email, String password, Boolean remember) {
             mEmail = email;
             mPassword = password;
+            mRemembered = remember;
         }
 
         @Override
@@ -295,6 +309,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             showProgress(false);
 
             if (success) {
+                if (mRemembered) {
+                    SharedPreferences settings = getSharedPreferences("setting", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("loginEmail", mEmail);
+                    editor.putString("loginPassword", mPassword);
+                    editor.putBoolean("loginRemember", true);
+                    editor.commit();
+                    Log.i("login", "password saved" + settings.getString("loginEmail", "null"));
+                }
                 finish();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             } else {
