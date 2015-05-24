@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.google.android.gms.common.ConnectionResult;
@@ -133,7 +134,8 @@ public class DataTransferService extends Service {
             }).start();
         }else {
             Log.i(TAG,"attempt:"+attemptCount);
-            if (attemptCount> Flags.MAXRETRY){
+            Toast.makeText(getApplicationContext(), "connection failed, please try again!", Toast.LENGTH_LONG).show();
+            /*if (attemptCount> Flags.MAXRETRY){
                 Log.e(TAG,"tried 5 times to request,give up");
                 attemptCount = 0;
             }else {
@@ -150,7 +152,7 @@ public class DataTransferService extends Service {
                 Intent myIntent1 = new Intent(context, DataTransferService.class);
                 myIntent1.setAction("REQUEST_DATA");
                 context.startService(myIntent1);
-            }
+            }*/
         }
         //saveFile();
     }
@@ -180,15 +182,17 @@ public class DataTransferService extends Service {
             }).start();
         }else {
             Log.i(TAG,"terminationcount:"+terminationCount);
+            Toast.makeText(getApplicationContext(), "connection failed, please try again!", Toast.LENGTH_LONG).show();
+            /*
             if (terminationCount>Flags.MAXRETRY){
                 Log.e(TAG,"tried 5 times to terminate,give up");
                 terminationCount = 0;
             }else {
-                /*try {
+                try {
                     Thread.sleep(((int) (1000 * Math.pow(2, terminationCount))));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }*/
+                }
                 terminationCount++;
                 Log.i(TAG, "not connected,restart,attempts: "+terminationCount);
 
@@ -197,7 +201,9 @@ public class DataTransferService extends Service {
                 Intent myIntent1 = new Intent(context, DataTransferService.class);
                 myIntent1.setAction("REQUEST_DATA");
                 context.startService(myIntent1);
-            }
+            }*/
+
+
         }
         //saveFile();
     }
@@ -224,22 +230,24 @@ public class DataTransferService extends Service {
             }).start();
         }else{
             Log.i(TAG,"attemptstartcount:"+startAttemptCount);
+            Toast.makeText(getApplicationContext(), "connection failed, please try again!", Toast.LENGTH_LONG).show();
+            /*
             if (startAttemptCount>Flags.MAXRETRY){
                 Log.e(TAG,"try to start for 5 times, give up");
                 startAttemptCount = 0;
             }else {
-                /*try {
+                try {
                     Thread.sleep(((int) (1000 * Math.pow(2, startAttemptCount))));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }*/
+
                 startAttemptCount++;
                 Log.e(TAG, "not connected,restarting,attempt: "+startAttemptCount);
                 Context context = this.getApplicationContext();
 
                 Intent myIntent1 = new Intent(context, DataTransferService.class);
                 context.startService(myIntent1);
-            }
+            }*/
 
         }
         //saveFile();
