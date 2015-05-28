@@ -38,6 +38,12 @@
             android:label="BLE testing" >
 
         </activity>
+        <activity
+            android:name=".BLEControlActivity"
+            android:label="BLE testing" >
+
+        </activity>
+
         <service
             android:name=".BLEControlService"
             android:enabled="true"

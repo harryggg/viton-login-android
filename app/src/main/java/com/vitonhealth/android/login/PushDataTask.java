@@ -81,8 +81,8 @@ public class PushDataTask extends AsyncTask<Void, Void, String> {
                         }
 
                     }
-                    File temp = new File(ads + dir + "/" + file);
-                    temp.delete();
+                    /*File temp = new File(ads + dir + "/" + file);
+                    temp.delete();*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -97,10 +97,11 @@ public class PushDataTask extends AsyncTask<Void, Void, String> {
                 }
 
             }
+            /*
             if (allSuccess) {
                 File tempDir = new File(ads + dir + "/");
                 tempDir.delete();
-            }
+            }*/
         }
         return data;
     }

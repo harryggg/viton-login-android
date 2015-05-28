@@ -165,6 +165,9 @@ public class BLEScanActivity extends ListActivity {
         Intent intent =  new Intent(this, BLEControlService.class);
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(BLEControlService.EXTRAS_DEVICE_ADDRESS, device.getAddress());
+        Intent intentActivity = new Intent(this, BLEControlActivity.class);
+        intentActivity.putExtra(BLEControlActivity.EXTRAS_DEVICE_NAME, device.getName());
+        intentActivity.putExtra(BLEControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         SharedPreferences settings = getSharedPreferences("setting",0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("LeDeviceAddress",device.getAddress());
@@ -174,6 +177,7 @@ public class BLEScanActivity extends ListActivity {
             mBluetoothAdapter.startLeScan(mLeScanCallback);
             mScanning = false;
         }
+        startActivity(intentActivity);
         startService(intent);
     }
 
