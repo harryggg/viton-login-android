@@ -72,6 +72,12 @@ public class MainActivity extends ActionBarActivity {
             editor.commit();
             startActivity(new Intent(this.getApplicationContext(), LoginActivity.class));
             finish();
+        }else if (id == R.id.ble_data){
+            SharedPreferences settings = getSharedPreferences("setting",0);
+            Intent intentActivity = new Intent(this, BLEControlActivity.class);
+            intentActivity.putExtra(BLEControlActivity.EXTRAS_DEVICE_NAME, settings.getString("LeDeviceName","null"));
+            intentActivity.putExtra(BLEControlActivity.EXTRAS_DEVICE_ADDRESS, settings.getString("LeDeviceAddress","null"));
+            startActivity(intentActivity);
         }
 
         return super.onOptionsItemSelected(item);

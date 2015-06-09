@@ -1,6 +1,7 @@
 package com.vitonhealth.android.login;
 
 
+        import android.app.AlarmManager;
         import android.app.NotificationManager;
         import android.app.PendingIntent;
         import android.app.Service;
@@ -15,6 +16,7 @@ package com.vitonhealth.android.login;
         import android.bluetooth.BluetoothProfile;
         import android.content.Context;
         import android.content.Intent;
+        import android.content.SharedPreferences;
         import android.os.Binder;
         import android.os.Environment;
         import android.os.IBinder;
@@ -90,39 +92,12 @@ public class BluetoothLeService extends Service {
                 // Attempts to discover services after successful connection.
                 Log.i(TAG, "Attempting to start service discovery:" +
                         mBluetoothGatt.discoverServices());
-
+                setNextAlarm(0);
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("disconnected")
-                                .setContentText("please click this to reconnect!");
-
-
-// Creates an explicit intent for an Activity in your app
-                Intent resultIntent = new Intent(getApplicationContext(), BLEScanActivity.class);
-
-// The stack builder object will contain an artificial back stack for the
-// started Activity.
-// This ensures that navigating backward from the Activity leads out of
-// your application to the Home screen.
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
-// Adds the back stack for the Intent (but not the Intent itself)
-                stackBuilder.addParentStack(BLEScanActivity.class);
-// Adds the Intent that starts the Activity to the top of the stack
-                stackBuilder.addNextIntent(resultIntent);
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(
-                                0,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                mBuilder.setContentIntent(resultPendingIntent);
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
-                mNotificationManager.notify(1, mBuilder.build());
+                stopService(new Intent(BluetoothLeService.this,BLEControlService.class));
+                setNextAlarm(1);
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -479,6 +454,30 @@ public class BluetoothLeService extends Service {
         public PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication("admin@viton.com",
                     "secret".toCharArray());
+        }
+    }
+
+    public void setNextAlarm(int onOff){
+        //0 is off, 1 is on
+
+
+        Context context = this.getApplicationContext();
+        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent =  new Intent(this, BLEControlService.class);
+        SharedPreferences settings = getSharedPreferences("setting",0);
+        intent.putExtra(BLEControlService.EXTRAS_DEVICE_NAME, settings.getString("LeDeviceName","null"));
+        intent.putExtra(BLEControlService.EXTRAS_DEVICE_ADDRESS, settings.getString("LeDeviceAddress","null"));
+
+        PendingIntent alarmIntent = PendingIntent.getService(context, 0, intent, 0);
+        if (onOff==1) {
+            alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() +
+                            1*1000, alarmIntent);
+            Log.i(TAG,"Retry with name:"+settings.getString("LeDeviceName","null")+settings.getString("LeDeviceAddress","null"));
+            Log.i(TAG,"setNextAlarm");
+        }else{
+            Log.i(TAG,"cancelNextAlarm");
+            alarmMgr.cancel(alarmIntent);
         }
     }
 

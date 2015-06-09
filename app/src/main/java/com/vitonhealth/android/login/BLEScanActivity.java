@@ -172,6 +172,7 @@ public class BLEScanActivity extends ListActivity {
         SharedPreferences settings = getSharedPreferences("setting",0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("LeDeviceAddress",device.getAddress());
+        editor.putString("LeDeviceName",device.getName());
         editor.commit();
         Log.i(TAG,settings.getString("LeDeviceAddress","null"));
         if (mScanning) {
