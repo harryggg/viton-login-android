@@ -1,6 +1,8 @@
 package com.vitonhealth.android.login;
 
 
+        import android.app.NotificationManager;
+        import android.app.PendingIntent;
         import android.app.Service;
         import android.bluetooth.BluetoothAdapter;
         import android.bluetooth.BluetoothDevice;
@@ -17,6 +19,8 @@ package com.vitonhealth.android.login;
         import android.os.Environment;
         import android.os.IBinder;
         import android.os.SystemClock;
+        import android.support.v4.app.NotificationCompat;
+        import android.support.v4.app.TaskStackBuilder;
         import android.util.Log;
 
         import org.json.JSONArray;
@@ -90,6 +94,35 @@ public class BluetoothLeService extends Service {
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 intentAction = ACTION_GATT_DISCONNECTED;
                 mConnectionState = STATE_DISCONNECTED;
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getApplicationContext())
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("disconnected")
+                                .setContentText("please click this to reconnect!");
+
+
+// Creates an explicit intent for an Activity in your app
+                Intent resultIntent = new Intent(getApplicationContext(), BLEScanActivity.class);
+
+// The stack builder object will contain an artificial back stack for the
+// started Activity.
+// This ensures that navigating backward from the Activity leads out of
+// your application to the Home screen.
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+// Adds the back stack for the Intent (but not the Intent itself)
+                stackBuilder.addParentStack(BLEScanActivity.class);
+// Adds the Intent that starts the Activity to the top of the stack
+                stackBuilder.addNextIntent(resultIntent);
+                PendingIntent resultPendingIntent =
+                        stackBuilder.getPendingIntent(
+                                0,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                mBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+                mNotificationManager.notify(1, mBuilder.build());
                 Log.i(TAG, "Disconnected from GATT server.");
                 broadcastUpdate(intentAction);
             }
@@ -339,7 +372,7 @@ public class BluetoothLeService extends Service {
             saveFile(new ArrayList<String>(heartBeats));
             heartBeats.clear();
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd,hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd,kk:mm:ss");
         String now = sdf.format(new Date());
         heartBeats.add(now + " " + heartRate);
     }

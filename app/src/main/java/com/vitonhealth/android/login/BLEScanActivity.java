@@ -51,6 +51,7 @@ package com.vitonhealth.android.login;
 public class BLEScanActivity extends ListActivity {
     private static final String TAG = "DeviceScanActivity";
 
+
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
@@ -179,6 +180,7 @@ public class BLEScanActivity extends ListActivity {
         }
         startActivity(intentActivity);
         startService(intent);
+        finish();
     }
 
     private void scanLeDevice(final boolean enable) {
