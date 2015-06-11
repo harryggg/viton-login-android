@@ -2,6 +2,8 @@ package com.vitonhealth.android.login;
 
 
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
         import android.bluetooth.BluetoothGattCharacteristic;
         import android.bluetooth.BluetoothGattService;
@@ -108,7 +110,8 @@ public class BLEControlService extends Service {
         if(intent.getAction()=="TERMINATION"){
             Log.i(TAG,"terminated");
             //           unregisterReceiver(mGattUpdateReceiver);
-            //stopForeground(true);
+            stopForeground(true);
+
             stopSelf();
         }else {
             Log.i(TAG, "started");
@@ -117,17 +120,14 @@ public class BLEControlService extends Service {
             registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
             Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
             bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
-            /*NotificationCompat.Builder b=new NotificationCompat.Builder(this);
 
-            b.setOngoing(true);
-
-            b.setContentTitle(getString(R.string.notification_title))
-                    .setContentText("ble")
-                    .setSmallIcon(android.R.drawable.sym_def_app_icon)
-                    .setTicker(getString(R.string.ticker_text));
-
-
-            startForeground(1, b.build());*/
+            Notification notification = new Notification(R.drawable.ic_launcher, getText(R.string.ticker_text),
+                    System.currentTimeMillis());
+            Intent notificationIntent = new Intent(this, BLEControlService.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            notification.setLatestEventInfo(this, getText(R.string.notification_title),
+                    getText(R.string.ble_notification_text), pendingIntent);
+            startForeground(2, notification);
 
 
         }

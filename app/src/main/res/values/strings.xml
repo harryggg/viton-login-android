@@ -9,7 +9,8 @@
     <string name="viton_setting">Viton Setting</string>
     <string name="ble">ble testing</string>
     <string name="ticker_text">ble ongoing ticker text</string>
-    <string name="notification_title">ble ongoing title</string>
+    <string name="notification_title">ble scanning is ongoing</string>
+    <string name="ble_notification_text">ongoing ongoing</string>
 
 
 
